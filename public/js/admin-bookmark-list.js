@@ -16,6 +16,44 @@
   let currentSearchKeyword = '';
   let currentCategoryFilter = '';
 
+  function getSearchValue() {
+    if (!searchInput) return;
+    if (searchInput.isContentEditable) {
+      return (searchInput.textContent || '').replace(/\u00a0/g, ' ');
+    }
+    return searchInput.value || '';
+  }
+
+  function updateSearchPlaceholder() {
+    if (!searchInput?.isContentEditable) return;
+    searchInput.dataset.empty = getSearchValue().trim() ? 'false' : 'true';
+  }
+
+  function initSearchBox() {
+    if (!searchInput) return;
+
+    if (!searchInput.isContentEditable) return;
+
+    searchInput.textContent = '';
+    searchInput.setAttribute('inputmode', 'search');
+    searchInput.setAttribute('enterkeyhint', 'search');
+    searchInput.setAttribute('spellcheck', 'false');
+    updateSearchPlaceholder();
+
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') e.preventDefault();
+    });
+    searchInput.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData)?.getData('text/plain') || '';
+      document.execCommand('insertText', false, text.replace(/[\r\n]+/g, ' '));
+      updateSearchPlaceholder();
+      searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    searchInput.addEventListener('input', updateSearchPlaceholder);
+    searchInput.addEventListener('blur', updateSearchPlaceholder);
+  }
+
   function updatePaginationButtons() {
     if (prevPageBtn) prevPageBtn.disabled = currentPage <= 1;
     if (nextPageBtn) nextPageBtn.disabled = currentPage >= Math.ceil(totalItems / pageSize);
@@ -331,10 +369,10 @@
   function bindSearchAndPagination() {
     if (searchInput) {
       let debounceTimer;
-      searchInput.addEventListener('input', (e) => {
+      searchInput.addEventListener('input', () => {
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => {
-          currentSearchKeyword = e.target.value.trim();
+          currentSearchKeyword = getSearchValue().trim();
           currentPage = 1;
           fetchConfigs(currentPage, currentSearchKeyword, currentCategoryFilter);
         }, SEARCH_DEBOUNCE_MS);
@@ -405,6 +443,7 @@
   }
 
   function init() {
+    initSearchBox();
     bindSearchAndPagination();
     bindDeleteConfirmModal();
     fetchConfigs();

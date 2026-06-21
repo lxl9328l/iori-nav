@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>书签管理页面</title>
   <link rel="icon" href="/favicon.svg?v=148aafdf" type="image/svg+xml">
-  <link rel="stylesheet" href="/css/admin-layout.css?v=d20af02c" />
+  <link rel="stylesheet" href="/css/admin-layout.css?v=42e6c65a" />
   <link rel="stylesheet" href="/css/admin-forms.css?v=70b67305" />
   <link rel="stylesheet" href="/css/admin-card-options.css?v=55b9995c" />
   <link rel="stylesheet" href="/css/admin-preview-shell.css?v=9b873f51" />
@@ -54,10 +54,10 @@
     <div class="import-export">
       <div id="categoryFilterWrapper" class="custom-dropdown-wrapper min-w-[150px]"></div>
       <input type="hidden" id="categoryFilter" value="">
-      <input type="text" id="searchInput" name="mySearchInput" autocomplete="off" readonly
-        onfocus="this.removeAttribute('readonly');"
+      <div id="searchInput" role="searchbox" contenteditable="true" tabindex="0" aria-label="搜索书签"
+        aria-multiline="false" data-placeholder="搜索书签(名称, URL, 分类)" data-empty="true"
         class="flex-1 min-w-[200px] px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 transition-shadow h-[42px]"
-        placeholder="搜索书签(名称, URL, 分类)" />
+      ></div>
       <input type="file" id="importFile" accept=".json,.html,.htm" style="display: none" />
       <div class="flex flex-wrap gap-2 items-center">
         <button id="batchBtn"
@@ -1537,7 +1537,7 @@
 
   <script src="/js/admin-shared.js?v=bb97f086"></script>
   <script src="/js/admin-cache.js?v=7b8faa7b"></script>
-  <script src="/js/admin-bookmark-list.js?v=6ea0c4b1"></script>
+  <script src="/js/admin-bookmark-list.js?v=d6db3383"></script>
   <script src="/js/admin-pending.js?v=2482c2ea"></script>
   <script src="/js/admin-tabs.js?v=fd9a0d73"></script>
   <script src="/js/admin-bookmark-privacy.js?v=306f5fdb"></script>
